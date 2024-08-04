@@ -13,6 +13,10 @@ app.use(cors());
 
 app.use("/api/v1", routes);
 
+app.get("/", (req, res) => {
+  res.json({ message: "Redmart backend data" });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on PORT: http://localhost:${PORT}`);
 });
