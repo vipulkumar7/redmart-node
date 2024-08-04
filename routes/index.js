@@ -35,6 +35,7 @@ const {
   updateAddress,
   deleteAddress,
 } = require("../controllers/addressController.js");
+const { stripePaymentController } = require("../controllers/paymentController.js");
 
 const routes = express.Router();
 
@@ -79,5 +80,7 @@ routes.get("/get-address", ensureAuthenticated, getAddress);
 routes.put("/update-address", ensureAuthenticated, updateAddress);
 
 routes.delete("/delete-address", ensureAuthenticated, deleteAddress);
+
+routes.post("/create-checkout-session", ensureAuthenticated, stripePaymentController)
 
 module.exports = routes;
