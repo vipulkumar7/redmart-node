@@ -1,6 +1,15 @@
 require("dotenv").config();
-const Stripe = require("stripe")
+const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET);
+
+const successUrl =
+  process.env.NODE_ENV === "prod"
+    ? process.env.PROD_SUCCESS_URL
+    : process.env.LOCAL_SUCCESS_URL;
+const cancelUrl =
+  process.env.NODE_ENV === "prod"
+    ? process.env.PROD_CANCEL_URL
+    : process.env.LOCAL_CANCEL_URL;
 
 const stripePaymentController = async (req, res) => {
   try {
@@ -12,7 +21,7 @@ const stripePaymentController = async (req, res) => {
           name: product.title,
           images: [product.image],
         },
-        unit_amount: Math.round(product.price * 100)
+        unit_amount: Math.round(product.price * 100),
       },
       quantity: product.quantity,
     }));
@@ -21,8 +30,8 @@ const stripePaymentController = async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: "https://vipul-redmart.vercel.app/success",
-      cancel_url: "https://vipul-redmart.vercel.app/cancel",
+      success_url: successUrl,
+      cancel_url: cancelUrl,
     });
 
     res.json({ id: session.id });
